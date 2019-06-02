@@ -1,0 +1,70 @@
+
+
+import java.io.*;
+import java.util.*;
+public class Solution {
+     static ArrayList<Integer> factor(int n) 
+    { 
+         ArrayList<Integer> l=new ArrayList<Integer>();
+        for (int i=2; i<=Math.sqrt(n); i++) 
+        { 
+            if (n%i==0) 
+            { 
+                l.addAll(factor(i));
+                l.addAll(factor(n/i));
+                return l;
+            }
+        }
+        l.add(n);
+    return l;
+     }
+
+    public static void main(String[] args)throws Exception {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        int t=Integer.parseInt(br.readLine());
+        while(t-->0)
+        {
+            String[] str=br.readLine().split("[.]");
+            //System.out.println(str[0]);
+            int n=Integer.parseInt(str[0]);
+            int fract=Integer.parseInt(str[1]);
+            int len=(str[1].length());
+            int temp=fract;
+            if(temp==0)
+            {
+                System.out.println(n);
+                continue;
+            }
+            ArrayList<Integer> num=factor(temp);
+            ArrayList<Integer> denum=factor((int)Math.pow(10,len));
+            for(int i=0;i<num.size();i++)
+            {
+                for(int j=0;j<denum.size();j++)
+                {
+                    if(num.get(i)%denum.get(j)==0)
+                    {
+                        num.set(i,(num.get(i)/denum.get(j)));
+                        denum.set(j,1);
+                    }
+                    
+                    else if(denum.get(j)%num.get(i)==0)
+                    {
+                        denum.set(j,(denum.get(j)/num.get(i)));
+                        num.set(i,1);
+                    }
+                }
+            }
+            int numerator=1;
+            int denumrator=1;
+            for(int i=0;i<num.size();i++)
+                numerator*=num.get(i);
+            for(int i=0;i<denum.size();i++)
+                denumrator*=denum.get(i);
+            if(n!=0)
+            System.out.println(n+" "+numerator+"/"+denumrator);
+            else
+                System.out.println(numerator+"/"+denumrator);
+        }
+    }
+}
